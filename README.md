@@ -27,7 +27,14 @@ Like `path.join` but for a URL.
 ## Motivation
 
 There are a lot of packages that attempt to provide this functionality but they all have issues.   
-This package exists to properly offer the ability to join urls.
+This package exists with the hope to do it right:
+
+- Consistent behavior
+- Support adding/removing leading and trailing slashes
+- Supports absolute URLs, e.g.: http//google.com
+- Supports protocol relative URLs: //google.com
+- Supports query strings
+
 
 ## Usage
 
@@ -40,15 +47,27 @@ urlJoin('foo', '', 'bar');  // /foo/bar
 urlJoin('foo', undefined, 'bar');  // /foo/bar
 urlJoin('foo', null, 'bar');  // /foo/bar
 
+// With leading & trailing slash options
 urlJoin('foo', 'bar', { leadingSlash: false });  // foo/bar
 urlJoin('foo', 'bar', { trailingSlash: true });  // /foo/bar/
 urlJoin('foo', 'bar', { leadingSlash: false, trailingSlash: true });  // foo/bar/
+
+// Absolute URLs
+urlJoin('http://google.com', 'foo');  // http://google.com/foo
+
+// Protocol relative URLs
+urlJoin('//google.com', 'foo', { protocolRelative: true });  // //google.com/foo
+
+// With query string
+urlJoin('foo', 'bar?queryString');  // /foo/bar?queryString
+urlJoin('foo', 'bar?queryString', { trailingSlash: true });  // /foo/bar/?queryString
 ```
 
 Available options:
 
 - `leadingSlash`: Add a leading `/` (defaults to `true`)
 - `trailingSlash`: Add a trailing `/` (defaults to `false`)
+- `protocolRelative`: Enables support for protocol relative URLs (defaults to `false`)
 
 
 ## Tests

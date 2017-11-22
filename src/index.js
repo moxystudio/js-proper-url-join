@@ -1,3 +1,24 @@
+const defaultUrlRegExp = /^(\w+:\/\/[^/?]+)?(.*?)(\?.+)?$/;
+const protocolRelativeUrlRegExp = /^(\/\/[^/?]+)(.*?)(\?.+)?$/;
+
+function splitUrl(partsStr, { protocolRelative }) {
+    const match = (protocolRelative && partsStr.match(protocolRelativeUrlRegExp)) ||
+                   partsStr.match(defaultUrlRegExp) ||
+                  [];
+
+    const beforePathname = match[1] || '';
+    const pathname = (match[2] || '')
+    // Remove leading slashes
+    .replace(/^\/+/, '')
+    // Remove trailing slashes
+    .replace(/\/+$/, '')
+    // Normalize consecutive slashes to just one
+    .replace(/\/+/g, '/');
+    const afterPathname = (match[3] || '');
+
+    return { beforePathname, pathname, afterPathname };
+}
+
 export default function urlJoin(...parts) {
     const lastArg = parts[parts.length - 1];
     let options;
@@ -9,33 +30,42 @@ export default function urlJoin(...parts) {
         parts = parts.slice(0, -1);
     }
 
+    // Parse options
     options = {
         leadingSlash: true,
         trailingSlash: false,
         ...options,
     };
 
-    // Join the parts, removing any leading or trailing slashes
-    let joined = parts
-    // Remove falsy values
-    .filter((part) => part && typeof part === 'string')
-    // Join the parts
-    .join('/')
-    // Remove leading slashes
-    .replace(/^\/+/, '')
-    // Remove trailing slashes
-    .replace(/\/+$/, '');
+    // Join parts
+    const partsStr = parts
+    .filter((part) => typeof part === 'string')
+    .join('/');
 
-    // Add leading and trailing slashes according to the options
-    if (options.leadingSlash) {
-        joined = `/${joined}`;
+    // Split the parts into beforePathname, pathname, and afterPathname
+    // (scheme://host)(/pathname)(?queryString)
+    const { beforePathname, pathname, afterPathname } = splitUrl(partsStr, options);
+
+    let url = '';
+
+    // Start with stuff before pathnamename (http://google.com)
+    if (beforePathname) {
+        url += beforePathname + (pathname ? '/' : '');
+    // Otherwise start with the leading slash
+    } else if (options.leadingSlash) {
+        url += '/';
     }
-    if (options.trailingSlash) {
-        joined = `${joined}/`;
+
+    // Add pathnamename (foo/bar)
+    url += pathname;
+
+    // Add trailing slash
+    if (options.trailingSlash && !url.endsWith('/')) {
+        url += '/';
     }
 
-    // Finally normalize any duplicate // to just /
-    joined = joined.replace(/\/+/g, '/');
+    // Finally add the after pathname name (?queryString)
+    url += afterPathname;
 
-    return joined;
+    return url;
 }
