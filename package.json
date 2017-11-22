@@ -1,0 +1,68 @@
+{
+  "name": "proper-url-join",
+  "description": "Like `path.join` but for a URL.",
+  "version": "0.0.0",
+  "keywords": [
+    "url",
+    "join",
+    "path",
+    "pathname",
+    "normalize"
+  ],
+  "author": "André Cruz <andre@moxy.studio>",
+  "homepage": "https://github.com/moxystudio/js-proper-url-join",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:moxystudio/js-proper-url-join.git"
+  },
+  "license": "MIT",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "files": [
+    "lib",
+    "es"
+  ],
+  "scripts": {
+    "build:commonjs": "BABEL_ENV=commonjs babel src -d lib",
+    "build:es": "BABEL_ENV=es babel src -d es",
+    "build": "npm run build:commonjs && npm run build:es",
+    "lint": "eslint .",
+    "test": "jest --env node --coverage",
+    "prerelease": "npm t && npm run lint && npm run build",
+    "release": "standard-version",
+    "precommit": "lint-staged",
+    "commitmsg": "commitlint -e $GIT_PARAMS"
+  },
+  "standard-version": {
+    "scripts": {
+      "posttag": "git push --follow-tags origin master && npm publish"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-angular"
+    ]
+  },
+  "peerDependencies": {
+    "webpack-isomorphic-compiler": "^1.0.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^4.3.0",
+    "@commitlint/config-angular": "^4.3.0",
+    "babel-cli": "^6.26.0",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-preset-moxy": "^1.1.0",
+    "eslint": "^4.3.0",
+    "eslint-config-moxy": "^4.1.0",
+    "husky": "^0.14.3",
+    "jest": "^21.2.1",
+    "lint-staged": "^5.0.0",
+    "standard-version": "^4.2.0"
+  }
+}

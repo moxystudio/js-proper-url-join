@@ -1,0 +1,8 @@
+{
+    "presets": ["moxy"],
+    "env": {
+        "commonjs": {
+            "plugins": ["add-module-exports"]
+        },
+    }
+}
