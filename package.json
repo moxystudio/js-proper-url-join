@@ -1,7 +1,7 @@
 {
   "name": "proper-url-join",
   "description": "Like `path.join` but for a URL.",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "keywords": [
     "url",
     "join",
