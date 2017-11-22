@@ -32,7 +32,7 @@ This package exists to properly offer the ability to join urls.
 ## Usage
 
 ```js
-import urlJoin from 'url-join';
+import urlJoin from 'proper-url-join';
 
 urlJoin('foo', 'bar');  // /foo/bar
 urlJoin('/foo/', '/bar/');  // /foo/bar
