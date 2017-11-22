@@ -32,7 +32,7 @@ This package exists with the hope to do it right:
 - Consistent behavior
 - Support adding/removing leading and trailing slashes
 - Supports absolute URLs, e.g.: http//google.com
-- Supports protocol relative URLs: //google.com
+- Supports protocol relative URLs, e.g.: //google.com
 - Supports query strings
 
 
@@ -41,26 +41,26 @@ This package exists with the hope to do it right:
 ```js
 import urlJoin from 'proper-url-join';
 
-urlJoin('foo', 'bar');  // /foo/bar
-urlJoin('/foo/', '/bar/');  // /foo/bar
-urlJoin('foo', '', 'bar');  // /foo/bar
-urlJoin('foo', undefined, 'bar');  // /foo/bar
-urlJoin('foo', null, 'bar');  // /foo/bar
+urlJoin('foo', 'bar'); // /foo/bar
+urlJoin('/foo/', '/bar/'); // /foo/bar
+urlJoin('foo', '', 'bar'); // /foo/bar
+urlJoin('foo', undefined, 'bar'); // /foo/bar
+urlJoin('foo', null, 'bar'); // /foo/bar
 
 // With leading & trailing slash options
-urlJoin('foo', 'bar', { leadingSlash: false });  // foo/bar
-urlJoin('foo', 'bar', { trailingSlash: true });  // /foo/bar/
-urlJoin('foo', 'bar', { leadingSlash: false, trailingSlash: true });  // foo/bar/
+urlJoin('foo', 'bar', { leadingSlash: false }); // foo/bar
+urlJoin('foo', 'bar', { trailingSlash: true }); // /foo/bar/
+urlJoin('foo', 'bar', { leadingSlash: false, trailingSlash: true }); // foo/bar/
 
 // Absolute URLs
-urlJoin('http://google.com', 'foo');  // http://google.com/foo
+urlJoin('http://google.com', 'foo'); // http://google.com/foo
 
 // Protocol relative URLs
-urlJoin('//google.com', 'foo', { protocolRelative: true });  // //google.com/foo
+urlJoin('//google.com', 'foo', { protocolRelative: true }); // //google.com/foo
 
 // With query string
-urlJoin('foo', 'bar?queryString');  // /foo/bar?queryString
-urlJoin('foo', 'bar?queryString', { trailingSlash: true });  // /foo/bar/?queryString
+urlJoin('foo', 'bar?queryString'); // /foo/bar?queryString
+urlJoin('foo', 'bar?queryString', { trailingSlash: true }); // /foo/bar/?queryString
 ```
 
 Available options:
