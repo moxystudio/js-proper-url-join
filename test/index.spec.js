@@ -2,6 +2,7 @@ import urlJoin from '../src';
 
 it('should add leading slash and no trailing slash by default', () => {
     expect(urlJoin()).toBe('/');
+    expect(urlJoin(undefined, 'foo')).toBe('/foo');
     expect(urlJoin('foo', null, 'bar')).toBe('/foo/bar');
     expect(urlJoin('foo', '', 'bar')).toBe('/foo/bar');
     expect(urlJoin('foo')).toBe('/foo');
@@ -37,6 +38,7 @@ it('should add leading slash and trailing slash', () => {
     const options = { trailingSlash: true };
 
     expect(urlJoin(options)).toBe('/');
+    expect(urlJoin(undefined, 'foo', options)).toBe('/foo/');
     expect(urlJoin('foo', null, 'bar', options)).toBe('/foo/bar/');
     expect(urlJoin('foo', '', 'bar', options)).toBe('/foo/bar/');
     expect(urlJoin('foo', options)).toBe('/foo/');
@@ -72,6 +74,7 @@ it('should remove leading slash and add trailing slash', () => {
     const options = { leadingSlash: false, trailingSlash: true };
 
     expect(urlJoin(options)).toBe('/');
+    expect(urlJoin(undefined, 'foo', options)).toBe('foo/');
     expect(urlJoin('foo', null, 'bar', options)).toBe('foo/bar/');
     expect(urlJoin('foo', '', 'bar', options)).toBe('foo/bar/');
     expect(urlJoin('foo', options)).toBe('foo/');
@@ -107,6 +110,7 @@ it('should remove leading slash and trailing slash', () => {
     const options = { leadingSlash: false, trailingSlash: false };
 
     expect(urlJoin(options)).toBe('');
+    expect(urlJoin(undefined, 'foo', options)).toBe('foo');
     expect(urlJoin('foo', null, 'bar', options)).toBe('foo/bar');
     expect(urlJoin('foo', '', 'bar', options)).toBe('foo/bar');
     expect(urlJoin('foo', options)).toBe('foo');
