@@ -34,6 +34,7 @@ export default function urlJoin(...parts) {
     options = {
         leadingSlash: true,
         trailingSlash: false,
+        protocolRelative: false,
         ...options,
     };
 
@@ -48,7 +49,7 @@ export default function urlJoin(...parts) {
 
     let url = '';
 
-    // Start with stuff before pathnamename (http://google.com)
+    // Start with beforePathname if not empty (http://google.com)
     if (beforePathname) {
         url += beforePathname + (pathname ? '/' : '');
     // Otherwise start with the leading slash
@@ -56,7 +57,7 @@ export default function urlJoin(...parts) {
         url += '/';
     }
 
-    // Add pathnamename (foo/bar)
+    // Add pathname (foo/bar)
     url += pathname;
 
     // Add trailing slash
@@ -64,7 +65,7 @@ export default function urlJoin(...parts) {
         url += '/';
     }
 
-    // Finally add the after pathname name (?queryString)
+    // Finally add afterPathname (?queryString)
     url += afterPathname;
 
     return url;
