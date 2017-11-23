@@ -23,7 +23,7 @@ export default function urlJoin(...parts) {
     const lastArg = parts[parts.length - 1];
     let options;
 
-    // If last argument is an object, then it it's the options
+    // If last argument is an object, then it's the options
     // Note that null is an object, so we verify if is truthy
     if (lastArg && typeof lastArg === 'object') {
         options = lastArg;
