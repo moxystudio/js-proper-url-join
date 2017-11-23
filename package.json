@@ -49,15 +49,11 @@
       "@commitlint/config-angular"
     ]
   },
-  "peerDependencies": {
-    "webpack-isomorphic-compiler": "^1.0.0"
-  },
   "devDependencies": {
     "@commitlint/cli": "^5.0.1",
     "@commitlint/config-angular": "^4.3.0",
     "babel-cli": "^6.26.0",
-    "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-preset-moxy": "^1.1.0",
+    "babel-preset-moxy": "^2.0.1",
     "eslint": "^4.3.0",
     "eslint-config-moxy": "^4.1.0",
     "husky": "^0.14.3",
