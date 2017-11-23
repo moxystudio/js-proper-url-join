@@ -21,7 +21,7 @@ Like `path.join` but for a URL.
 
 ## Installation
 
-`$ npm install proper-url-join --save-dev`
+`$ npm install proper-url-join`
 
 
 ## Motivation
