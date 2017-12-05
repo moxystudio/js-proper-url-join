@@ -40,7 +40,7 @@ export default function urlJoin(...parts) {
 
     // Join parts
     const partsStr = parts
-    .filter((part) => typeof part === 'string')
+    .filter((part) => typeof part === 'string' || typeof part === 'number')
     .join('/');
 
     // Split the parts into beforePathname, pathname, and afterPathname

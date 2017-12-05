@@ -157,3 +157,34 @@ it('should support URLs with relative protocol according to options.protocolRela
     expect(urlJoin('//google.com/foo', 'bar', options)).toBe('/google.com/foo/bar');
     expect(urlJoin('//google.com/foo//', 'bar', options)).toBe('/google.com/foo/bar');
 });
+
+it('should include integers', () => {
+    expect(urlJoin(undefined, 1)).toBe('/1');
+    expect(urlJoin(1, null, 2)).toBe('/1/2');
+    expect(urlJoin(1, '', 2)).toBe('/1/2');
+    expect(urlJoin(1)).toBe('/1');
+    expect(urlJoin('/1')).toBe('/1');
+    expect(urlJoin('/', '/1')).toBe('/1');
+    expect(urlJoin('/', '//1')).toBe('/1');
+    expect(urlJoin('/', '/1//')).toBe('/1');
+    expect(urlJoin('/', '/1/', '')).toBe('/1');
+    expect(urlJoin('/', '/1/', '/')).toBe('/1');
+    expect(urlJoin(1, 2)).toBe('/1/2');
+    expect(urlJoin('/1', 2)).toBe('/1/2');
+    expect(urlJoin('/1', '/2')).toBe('/1/2');
+    expect(urlJoin('/1/', '/2/')).toBe('/1/2');
+    expect(urlJoin('/1/', '/2/3')).toBe('/1/2/3');
+    expect(urlJoin('/1/', '/2//3')).toBe('/1/2/3');
+
+    expect(urlJoin('http://google.com', 1)).toBe('http://google.com/1');
+    expect(urlJoin('http://google.com/', 1)).toBe('http://google.com/1');
+    expect(urlJoin('http://google.com/', '/1')).toBe('http://google.com/1');
+    expect(urlJoin('http://google.com//', '/1')).toBe('http://google.com/1');
+    expect(urlJoin('http://google.com/1', 2)).toBe('http://google.com/1/2');
+
+    expect(urlJoin('http://google.com', '?1')).toBe('http://google.com?1');
+    expect(urlJoin('http://google.com', 'foo?1')).toBe('http://google.com/foo?1');
+    expect(urlJoin('http://google.com', 'foo', '?1')).toBe('http://google.com/foo?1');
+    expect(urlJoin('http://google.com', 'foo/', '?1')).toBe('http://google.com/foo?1');
+    expect(urlJoin('http://google.com?1')).toBe('http://google.com?1');
+});
