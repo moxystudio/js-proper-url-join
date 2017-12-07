@@ -158,7 +158,7 @@ it('should support URLs with relative protocol according to options.protocolRela
     expect(urlJoin('//google.com/foo//', 'bar', options)).toBe('/google.com/foo/bar');
 });
 
-it('should include integers', () => {
+it('should include numbers', () => {
     expect(urlJoin(undefined, 1)).toBe('/1');
     expect(urlJoin(1, null, 2)).toBe('/1/2');
     expect(urlJoin(1, '', 2)).toBe('/1/2');
