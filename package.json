@@ -57,7 +57,7 @@
     "eslint": "^4.3.0",
     "eslint-config-moxy": "^4.1.0",
     "husky": "^0.14.3",
-    "jest": "^21.2.1",
+    "jest": "^22.0.0",
     "lint-staged": "^6.0.0",
     "standard-version": "^4.2.0"
   }
