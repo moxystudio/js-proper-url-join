@@ -50,7 +50,7 @@
     ]
   },
   "devDependencies": {
-    "@commitlint/cli": "^5.2.4",
+    "@commitlint/cli": "^6.0.0",
     "@commitlint/config-conventional": "^5.2.3",
     "babel-cli": "^6.26.0",
     "babel-preset-moxy": "^2.0.1",
