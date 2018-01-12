@@ -1,3 +1,4 @@
+const queryString = require('query-string');
 const defaultUrlRegExp = /^(\w+:\/\/[^/?]+)?(.*?)(\?.+)?$/;
 const protocolRelativeUrlRegExp = /^(\/\/[^/?]+)(.*?)(\?.+)?$/;
 
@@ -65,8 +66,13 @@ export default function urlJoin(...parts) {
         url += '/';
     }
 
-    // Finally add afterPathname (?queryString)
-    url += afterPathname;
+    // Build a query object based on the url query string and options query object
+    const query = { ...queryString.parse(afterPathname, options.queryOptions), ...options.query };
+    const queryStr = queryString.stringify(query, options.queryOptions);
+
+    if (queryStr) {
+        url += `?${queryStr}`;
+    }
 
     return url;
 }

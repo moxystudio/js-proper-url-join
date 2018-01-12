@@ -58,16 +58,52 @@ urlJoin('http://google.com', 'foo'); // http://google.com/foo
 // Protocol relative URLs
 urlJoin('//google.com', 'foo', { protocolRelative: true }); // //google.com/foo
 
-// With query string
+// With query string as an url part
 urlJoin('foo', 'bar?queryString'); // /foo/bar?queryString
 urlJoin('foo', 'bar?queryString', { trailingSlash: true }); // /foo/bar/?queryString
+
+// With query string as an object
+urlJoin('foo', { query: { biz: 'buz', foo: 'bar' } }); // /foo?biz=buz&foo=bar
+
+// With both query string as an url part and an object
+urlJoin('foo', 'bar?queryString', { query: { biz: 'buz', foo: 'bar' } }); // /foo/bar?biz=buz&foo=bar&queryString
 ```
 
-Available options:
+#### options
 
-- `leadingSlash`: Add a leading `/` (defaults to `true`)
-- `trailingSlash`: Add a trailing `/` (defaults to `false`)
-- `protocolRelative`: Enables support for protocol relative URLs (defaults to `false`)
+###### leadingSlash
+
+Type: `boolean`<br>
+Default: `true`
+
+Add a leading `/`
+
+###### trailingSlash
+
+Type: `boolean`<br>
+Default: `false`
+
+Add a trailing `/
+
+###### protocolRelative
+
+Type: `boolean`<br>
+Default: `false`
+
+Enables support for protocol relative URLs
+
+###### query
+
+Type: `object`
+
+Query string object that will be properly stringified and appended to the url. It will be merged with the query string in the url, if it exists.
+
+###### queryOptions
+
+Type: `object`
+
+[Options](https://github.com/sindresorhus/query-string#stringifyobject-options) to be considered when stringifying the query
+
 
 
 ## Tests
