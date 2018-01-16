@@ -73,21 +73,21 @@ urlJoin('foo', 'bar?queryString', { query: { biz: 'buz', foo: 'bar' } }); // /fo
 
 ###### leadingSlash
 
-Type: `boolean`<br>
+Type: `boolean`   
 Default: `true`
 
 Add a leading `/`
 
 ###### trailingSlash
 
-Type: `boolean`<br>
+Type: `boolean`   
 Default: `false`
 
-Add a trailing `/
+Add a trailing `/`
 
 ###### protocolRelative
 
-Type: `boolean`<br>
+Type: `boolean`   
 Default: `false`
 
 Enables support for protocol relative URLs
