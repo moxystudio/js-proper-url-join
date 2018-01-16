@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.2.0"></a>
+# [1.2.0](https://github.com/moxystudio/js-proper-url-join/compare/v1.1.2...v1.2.0) (2018-01-16)
+
+
+### Features
+
+* add query string object support ([#12](https://github.com/moxystudio/js-proper-url-join/issues/12)) ([ee58d16](https://github.com/moxystudio/js-proper-url-join/commit/ee58d16))
+
+
+
 <a name="1.1.2"></a>
 ## [1.1.2](https://github.com/moxystudio/js-proper-url-join/compare/v1.1.1...v1.1.2) (2017-12-07)
 
