@@ -188,3 +188,40 @@ it('should include numbers', () => {
     expect(urlJoin('http://google.com', 'foo/', '?1')).toBe('http://google.com/foo?1');
     expect(urlJoin('http://google.com?1')).toBe('http://google.com?1');
 });
+
+it('should handle the provided query object and append it to the url', () => {
+    const options = { query: { biz: 'buz', foo: 'bar' } };
+
+    expect(urlJoin('/google.com', options)).toBe('/google.com?biz=buz&foo=bar');
+    expect(urlJoin('google.com', options)).toBe('/google.com?biz=buz&foo=bar');
+
+    options.protocolRelative = false;
+
+    expect(urlJoin('//google.com', options)).toBe('/google.com?biz=buz&foo=bar');
+
+    options.leadingSlash = false;
+
+    expect(urlJoin('google.com', options)).toBe('google.com?biz=buz&foo=bar');
+
+    options.trailingSlash = true;
+
+    expect(urlJoin('google.com', options)).toBe('google.com/?biz=buz&foo=bar');
+
+    options.trailingSlash = false;
+
+    expect(urlJoin('google.com', 'qux?tux=baz', options)).toBe('google.com/qux?biz=buz&foo=bar&tux=baz');
+});
+
+it('should handle the provided query and query options objects', () => {
+    const options = { query: { foo: [1, 2, 3] }, queryOptions: {} };
+
+    expect(urlJoin('/google.com', options)).toBe('/google.com?foo=1&foo=2&foo=3');
+
+    options.queryOptions.arrayFormat = 'bracket';
+
+    expect(urlJoin('/google.com', options)).toBe('/google.com?foo[]=1&foo[]=2&foo[]=3');
+
+    options.queryOptions.arrayFormat = 'index';
+
+    expect(urlJoin('/google.com', options)).toBe('/google.com?foo[0]=1&foo[1]=2&foo[2]=3');
+});
