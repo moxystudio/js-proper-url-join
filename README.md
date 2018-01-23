@@ -23,6 +23,8 @@ Like `path.join` but for a URL.
 
 `$ npm install proper-url-join`
 
+This library expects the host environment to be up-to-date or polyfilled with [core-js](https://github.com/zloirock/core-js) or similar.
+
 
 ## Motivation
 
