@@ -62,6 +62,6 @@
     "standard-version": "^4.2.0"
   },
   "dependencies": {
-    "query-string": "^5.0.1"
+    "query-string": "^6.0.0"
   }
 }
