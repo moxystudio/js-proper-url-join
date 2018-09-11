@@ -1,4 +1,5 @@
-const queryString = require('query-string');
+import queryString from 'query-string';
+
 const defaultUrlRegExp = /^(\w+:\/\/[^/?]+)?(.*?)(\?.+)?$/;
 const protocolRelativeUrlRegExp = /^(\/\/[^/?]+)(.*?)(\?.+)?$/;
 
