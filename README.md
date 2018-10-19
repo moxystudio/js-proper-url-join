@@ -25,6 +25,8 @@ Like `path.join` but for a URL.
 
 This library expects the host environment to be up-to-date or polyfilled with [core-js](https://github.com/zloirock/core-js) or similar.
 
+This library is written in ES9 and is using ES modules. You must compile the source code to support older browsers.
+
 
 ## Motivation
 
