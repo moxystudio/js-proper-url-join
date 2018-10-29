@@ -50,7 +50,7 @@
     "eslint-config-moxy": "^6.0.0",
     "husky": "^1.1.2",
     "jest": "^23.0.0",
-    "lint-staged": "^7.0.0",
+    "lint-staged": "^8.0.0",
     "standard-version": "^4.2.0"
   },
   "dependencies": {
