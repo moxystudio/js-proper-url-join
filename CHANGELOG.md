@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="2.0.0"></a>
+# [2.0.0](https://github.com/moxystudio/js-proper-url-join/compare/v1.2.0...v2.0.0) (2019-03-13)
+
+
+### Features
+
+* compile to both cjs and es ([16a284f](https://github.com/moxystudio/js-proper-url-join/commit/16a284f))
+
+
+### BREAKING CHANGES
+
+* This library is no longer built with Babel, you must compile it yourself within your app
+
+
+
 <a name="1.2.0"></a>
 # [1.2.0](https://github.com/moxystudio/js-proper-url-join/compare/v1.1.2...v1.2.0) (2018-01-16)
 
