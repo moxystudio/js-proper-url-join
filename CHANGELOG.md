@@ -5,28 +5,6 @@ All notable changes to this project will be documented in this file. See [standa
 <a name="2.0.1"></a>
 ## [2.0.1](https://github.com/moxystudio/js-proper-url-join/compare/v1.2.0...v2.0.1) (2019-03-13)
 
-
-### Bug Fixes
-
-* fix husky script ([e2c65f1](https://github.com/moxystudio/js-proper-url-join/commit/e2c65f1))
-
-
-### Chores
-
-* remove babel compilation ([#25](https://github.com/moxystudio/js-proper-url-join/issues/25)) ([4c1e7d4](https://github.com/moxystudio/js-proper-url-join/commit/4c1e7d4))
-
-
-### Features
-
-* compile to both cjs and es ([16a284f](https://github.com/moxystudio/js-proper-url-join/commit/16a284f))
-
-
-### BREAKING CHANGES
-
-* This library is no longer built with Babel, you must compile it yourself within your app
-
-
-
 <a name="2.0.0"></a>
 # [2.0.0](https://github.com/moxystudio/js-proper-url-join/compare/v1.2.0...v2.0.0) (2019-03-13)
 
@@ -34,12 +12,6 @@ All notable changes to this project will be documented in this file. See [standa
 ### Features
 
 * compile to both cjs and es ([16a284f](https://github.com/moxystudio/js-proper-url-join/commit/16a284f))
-
-
-### BREAKING CHANGES
-
-* This library is no longer built with Babel, you must compile it yourself within your app
-
 
 
 <a name="1.2.0"></a>
