@@ -1,7 +1,3 @@
 {
-    "env":{
-        "test": {
-            "presets": ["moxy"]
-        }
-    }
+    "presets": ["babel-preset-moxy/lib"]
 }

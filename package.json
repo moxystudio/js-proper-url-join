@@ -45,11 +45,11 @@
   "devDependencies": {
     "@commitlint/cli": "^7.0.0",
     "@commitlint/config-conventional": "^7.0.0",
-    "babel-preset-moxy": "^2.3.5",
+    "babel-preset-moxy": "^3.0.0",
     "eslint": "^5.0.0",
     "eslint-config-moxy": "^6.0.0",
     "husky": "^1.1.2",
-    "jest": "^23.0.0",
+    "jest": "^24.5.0",
     "lint-staged": "^7.0.0",
     "standard-version": "^4.2.0"
   },
