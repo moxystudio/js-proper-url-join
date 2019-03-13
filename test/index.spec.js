@@ -1,4 +1,4 @@
-import urlJoin from '../lib';
+import urlJoin from '../src';
 
 it('should add leading slash and no trailing slash by default', () => {
     expect(urlJoin()).toBe('/');

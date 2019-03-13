@@ -17,11 +17,16 @@
   },
   "license": "MIT",
   "main": "lib/index.js",
+  "module": "es/index.js",
   "files": [
-    "lib"
+    "lib",
+    "es"
   ],
   "scripts": {
-    "lint": "eslint .",
+    "build:commonjs": "BABEL_ENV=commonjs babel src -d lib",
+    "build:es": "BABEL_ENV=es babel src -d es",
+    "build": "npm run build:commonjs && npm run build:es",
+    "lint": "eslint --ignore-path .gitignore .",
     "test": "jest --env node --coverage",
     "prerelease": "npm t && npm run lint && npm run build",
     "release": "standard-version"
@@ -43,9 +48,12 @@
     ]
   },
   "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.4",
     "@commitlint/cli": "^7.0.0",
     "@commitlint/config-conventional": "^7.0.0",
-    "babel-preset-moxy": "^3.0.0",
+    "babel-jest": "^24.5.0",
+    "babel-preset-moxy": "^3.0.4",
     "eslint": "^5.0.0",
     "eslint-config-moxy": "^6.0.0",
     "husky": "^1.1.2",
