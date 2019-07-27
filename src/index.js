@@ -3,19 +3,32 @@ import queryString from 'query-string';
 const defaultUrlRegExp = /^(\w+:\/\/[^/?]+)?(.*?)(\?.+)?$/;
 const protocolRelativeUrlRegExp = /^(\/\/[^/?]+)(.*?)(\?.+)?$/;
 
-function splitUrl(partsStr, { protocolRelative }) {
+const pipe = (...fns) => fns.reduce((f, g) => (...args) => g(f(...args)));
+
+function splitUrl(partsStr, { protocolRelative, trailingSlash, leadingSlash }) {
     const match = (protocolRelative && partsStr.match(protocolRelativeUrlRegExp)) ||
                    partsStr.match(defaultUrlRegExp) ||
                   [];
 
     const beforePathname = match[1] || '';
-    const pathname = (match[2] || '')
-    // Remove leading slashes
-    .replace(/^\/+/, '')
-    // Remove trailing slashes
-    .replace(/\/+$/, '')
-    // Normalize consecutive slashes to just one
-    .replace(/\/+/g, '/');
+
+    const shouldKeep = (opt) => opt === 'keep';
+
+    const removeLeadingSlashes = (leadingSlash) =>
+        (s) => shouldKeep(leadingSlash) ? s : s.replace(/^\/+/, '');
+
+    const removeTrailingSlashes = (trailingSlash) =>
+        (s) => shouldKeep(trailingSlash) ? s : s.replace(/\/+$/, '');
+
+    const normalizeConsecutiveSlashesToJustOne = (s) =>
+        s.replace(/\/+/g, '/');
+
+    const pathname = pipe(
+        removeLeadingSlashes(leadingSlash),
+        removeTrailingSlashes(trailingSlash),
+        normalizeConsecutiveSlashesToJustOne
+    )(match[2] || '');
+
     const afterPathname = (match[3] || '');
 
     return { beforePathname, pathname, afterPathname };
@@ -55,7 +68,7 @@ export default function urlJoin(...parts) {
     if (beforePathname) {
         url += beforePathname + (pathname ? '/' : '');
     // Otherwise start with the leading slash
-    } else if (options.leadingSlash) {
+    } else if (options.leadingSlash === true) {
         url += '/';
     }
 
@@ -63,7 +76,7 @@ export default function urlJoin(...parts) {
     url += pathname;
 
     // Add trailing slash
-    if (options.trailingSlash && !url.endsWith('/')) {
+    if (options.trailingSlash === true && !url.endsWith('/')) {
         url += '/';
     }
 
