@@ -29,12 +29,8 @@
     "lint": "eslint --ignore-path .gitignore .",
     "test": "jest --env node --coverage",
     "prerelease": "npm t && npm run lint && npm run build",
-    "release": "standard-version"
-  },
-  "standard-version": {
-    "scripts": {
-      "posttag": "git push --follow-tags origin master"
-    }
+    "release": "standard-version",
+    "postrelease": "git push --follow-tags origin master && npm publish"
   },
   "lint-staged": {
     "*.js": [
