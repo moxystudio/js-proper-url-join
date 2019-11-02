@@ -14,9 +14,9 @@ function splitUrl(partsStr, { protocolRelative, trailingSlash, leadingSlash }) {
 
     const shouldKeep = (opt) => opt === 'keep';
 
-    const removeLeadingSlashes = (s) => s.replace(/^\/+/, '');
+    const removeLeadingSlashes = (pathname) => pathname.replace(/^\/+/, '');
 
-    const removeTrailingSlashes = (s) => s.replace(/\/+$/, '');
+    const removeTrailingSlashes = (pathname) => pathname.replace(/\/+$/, '');
 
     const normalizeConsecutiveSlashesToJustOne = (s) =>
         s.replace(/\/+/g, '/');
