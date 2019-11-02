@@ -13,11 +13,9 @@ function parseUrl(partsStr, { protocolRelative }) {
     const getParts = (prePathname) =>
         prePathname.split('/').filter((part) => part !== '');
 
-    const hasLeadingSlash = (prePathname) =>
-        prePathname.match(/^\/+/) !== null;
+    const hasLeadingSlash = (prePathname) => RegExp(/^\/+/).test(prePathname);
 
-    const hasTrailingSlash = (prePathname) =>
-        prePathname.match(/\/+$/) !== null;
+    const hasTrailingSlash = (prePathname) => RegExp(/\/+$/).test(prePathname);
 
     const prePathname = match[2] || '';
 
