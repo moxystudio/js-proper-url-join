@@ -68,7 +68,7 @@ export default function urlJoin(...parts) {
     if (beforePathname) {
         url += beforePathname + (pathname ? '/' : '');
     // Otherwise start with the leading slash
-    } else if (options.leadingSlash === true) {
+    } else if (options.leadingSlash) {
         url += '/';
     }
 
