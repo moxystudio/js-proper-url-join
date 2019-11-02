@@ -14,20 +14,20 @@ function splitUrl(partsStr, { protocolRelative, trailingSlash, leadingSlash }) {
 
     const shouldKeep = (opt) => opt === 'keep';
 
-    const removeLeadingSlashes = (leadingSlash) =>
-        (s) => shouldKeep(leadingSlash) ? s : s.replace(/^\/+/, '');
+    const removeLeadingSlashes = (s) => s.replace(/^\/+/, '');
 
-    const removeTrailingSlashes = (trailingSlash) =>
-        (s) => shouldKeep(trailingSlash) ? s : s.replace(/\/+$/, '');
+    const removeTrailingSlashes = (s) => s.replace(/\/+$/, '');
 
     const normalizeConsecutiveSlashesToJustOne = (s) =>
         s.replace(/\/+/g, '/');
 
-    const pathname = pipe(
-        removeLeadingSlashes(leadingSlash),
-        removeTrailingSlashes(trailingSlash),
-        normalizeConsecutiveSlashesToJustOne
-    )(match[2] || '');
+    const actions = [
+        !shouldKeep(leadingSlash) && removeLeadingSlashes,
+        !shouldKeep(trailingSlash) && removeTrailingSlashes,
+        normalizeConsecutiveSlashesToJustOne,
+    ].filter(Boolean);
+
+    const pathname = pipe(...actions)(match[2] || '');
 
     const afterPathname = (match[3] || '');
 
