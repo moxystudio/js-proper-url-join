@@ -76,7 +76,7 @@ export default function urlJoin(...parts) {
     url += pathname;
 
     // Add trailing slash
-    if (options.trailingSlash === true && !url.endsWith('/')) {
+    if (options.trailingSlash && !url.endsWith('/')) {
         url += '/';
     }
 
