@@ -3,28 +3,38 @@ import queryString from 'query-string';
 const defaultUrlRegExp = /^(\w+:\/\/[^/?]+)?(.*?)(\?.+)?$/;
 const protocolRelativeUrlRegExp = /^(\/\/[^/?]+)(.*?)(\?.+)?$/;
 
-function parseUrl(partsStr, { protocolRelative }) {
+function parseUrl(partsStr, { protocolRelative, leadingSlash, trailingSlash }) {
     const match = (protocolRelative && partsStr.match(protocolRelativeUrlRegExp)) ||
                    partsStr.match(defaultUrlRegExp) ||
                   [];
 
     const prefix = match[1] || '';
 
-    const getParts = (prePathname) =>
-        prePathname.split('/').filter((part) => part !== '');
-
-    const hasLeadingSlash = (prePathname) =>
-        prePathname.match(/^\/+/) !== null;
-
-    const hasTrailingSlash = (prePathname) =>
-        prePathname.match(/\/+$/) !== null;
-
     const prePathname = match[2] || '';
+
+    const hasLeading = prePathname.match(/^\/+/) !== null;
+    const hasTrailing = prePathname.match(/\/+$/) !== null;
+
+    const getParts = (prePathname) => {
+        const rawParts = prePathname.split('/').filter((part) => part !== '');
+
+        return rawParts.map((part, idx) => {
+            if (leadingSlash === 'keep' && hasLeading && idx === 0) {
+                return `/${part}`;
+            }
+
+            if (trailingSlash === 'keep' && hasTrailing && idx === (rawParts.length - 1)) {
+                return `${part}/`;
+            }
+
+            return part;
+        });
+    };
 
     const pathname = {
         parts: getParts(prePathname),
-        hasLeading: hasLeadingSlash(prePathname),
-        hasTrailing: hasTrailingSlash(prePathname),
+        hasLeading,
+        hasTrailing,
     };
 
     const suffix = (match[3] || '');
