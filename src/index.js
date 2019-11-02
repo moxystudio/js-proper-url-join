@@ -64,14 +64,14 @@ export default function urlJoin(...parts) {
 
     // Start with prefix if not empty (http://google.com)
     if (prefix) {
-        url += prefix + (pathname ? '/' : '');
+        url += prefix + (pathname.parts.length > 0 ? '/' : '');
     // Otherwise start with the leading slash
     } else if (options.leadingSlash) {
         url += '/';
     }
 
     // Add pathname (foo/bar)
-    url += pathname;
+    url += pathname.parts.join('/');
 
     // Add trailing slash
     if (options.trailingSlash && !url.endsWith('/')) {
