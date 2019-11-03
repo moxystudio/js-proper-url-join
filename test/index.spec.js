@@ -20,6 +20,7 @@ it('should add leading slash and no trailing slash by default', () => {
     expect(urlJoin('/foo/', '/bar//baz')).toBe('/foo/bar/baz');
 
     expect(urlJoin('http://google.com')).toBe('http://google.com');
+    expect(urlJoin('http://google.com/')).toBe('http://google.com');
     expect(urlJoin('http://google.com', '')).toBe('http://google.com');
     expect(urlJoin('http://google.com', 'foo')).toBe('http://google.com/foo');
     expect(urlJoin('http://google.com/', 'foo')).toBe('http://google.com/foo');
@@ -56,6 +57,7 @@ it('should add leading slash and trailing slash', () => {
     expect(urlJoin('/foo/', '/bar//baz', options)).toBe('/foo/bar/baz/');
 
     expect(urlJoin('http://google.com', options)).toBe('http://google.com/');
+    expect(urlJoin('http://google.com/', options)).toBe('http://google.com/');
     expect(urlJoin('http://google.com', '', options)).toBe('http://google.com/');
     expect(urlJoin('http://google.com', 'foo', options)).toBe('http://google.com/foo/');
     expect(urlJoin('http://google.com/', 'foo', options)).toBe('http://google.com/foo/');
@@ -92,6 +94,7 @@ it('should remove leading slash and add trailing slash', () => {
     expect(urlJoin('/foo/', '/bar//baz', options)).toBe('foo/bar/baz/');
 
     expect(urlJoin('http://google.com', options)).toBe('http://google.com/');
+    expect(urlJoin('http://google.com/', options)).toBe('http://google.com/');
     expect(urlJoin('http://google.com', '', options)).toBe('http://google.com/');
     expect(urlJoin('http://google.com', 'foo', options)).toBe('http://google.com/foo/');
     expect(urlJoin('http://google.com/', 'foo', options)).toBe('http://google.com/foo/');
@@ -128,6 +131,7 @@ it('should remove leading slash and trailing slash', () => {
     expect(urlJoin('/foo/', '/bar//baz', options)).toBe('foo/bar/baz');
 
     expect(urlJoin('http://google.com', options)).toBe('http://google.com');
+    expect(urlJoin('http://google.com/', options)).toBe('http://google.com');
     expect(urlJoin('http://google.com', '', options)).toBe('http://google.com');
     expect(urlJoin('http://google.com', 'foo', options)).toBe('http://google.com/foo');
     expect(urlJoin('http://google.com/', 'foo', options)).toBe('http://google.com/foo');
@@ -226,42 +230,7 @@ it('should handle the provided query and query options objects', () => {
     expect(urlJoin('/google.com', options)).toBe('/google.com?foo[0]=1&foo[1]=2&foo[2]=3');
 });
 
-it('should keep the trailing slash', () => {
-    const options = { trailingSlash: 'keep' };
-
-    expect(urlJoin(options)).toBe('/');
-    expect(urlJoin(undefined, 'foo', options)).toBe('/foo');
-    expect(urlJoin('foo', null, 'bar', options)).toBe('/foo/bar');
-    expect(urlJoin('foo', '', 'bar', options)).toBe('/foo/bar');
-    expect(urlJoin('foo', options)).toBe('/foo');
-    expect(urlJoin('/foo', options)).toBe('/foo');
-    expect(urlJoin('/', '/foo', options)).toBe('/foo');
-    expect(urlJoin('/', '//foo', options)).toBe('/foo');
-    expect(urlJoin('/', '/foo//', options)).toBe('/foo/');
-    expect(urlJoin('/', '/foo/', '', options)).toBe('/foo/');
-    expect(urlJoin('/', '/foo/', '/', options)).toBe('/foo/');
-    expect(urlJoin('foo', 'bar', options)).toBe('/foo/bar');
-    expect(urlJoin('/foo', 'bar', options)).toBe('/foo/bar');
-    expect(urlJoin('/foo', '/bar', options)).toBe('/foo/bar');
-    expect(urlJoin('/foo/', '/bar/', options)).toBe('/foo/bar/');
-    expect(urlJoin('/foo/', '/bar/baz', options)).toBe('/foo/bar/baz');
-    expect(urlJoin('/foo/', '/bar//baz', options)).toBe('/foo/bar/baz');
-
-    expect(urlJoin('http://google.com', options)).toBe('http://google.com');
-    expect(urlJoin('http://google.com', '', options)).toBe('http://google.com');
-    expect(urlJoin('http://google.com', 'foo', options)).toBe('http://google.com/foo');
-    expect(urlJoin('http://google.com/', 'foo', options)).toBe('http://google.com/foo');
-    expect(urlJoin('http://google.com/', '/foo', options)).toBe('http://google.com/foo');
-    expect(urlJoin('http://google.com//', '/foo', options)).toBe('http://google.com/foo');
-    expect(urlJoin('http://google.com/foo', 'bar', options)).toBe('http://google.com/foo/bar');
-
-    expect(urlJoin('http://google.com', '?queryString', options)).toBe('http://google.com?queryString');
-    expect(urlJoin('http://google.com', 'foo?queryString', options)).toBe('http://google.com/foo?queryString');
-    expect(urlJoin('http://google.com', 'foo', '?queryString', options)).toBe('http://google.com/foo?queryString');
-    expect(urlJoin('http://google.com', 'foo/', '?queryString', options)).toBe('http://google.com/foo/?queryString');
-});
-
-it('should keep the leading slash', () => {
+it('should keep leading slash and remove trailing slash', () => {
     const options = { leadingSlash: 'keep' };
 
     expect(urlJoin(options)).toBe('');
@@ -283,6 +252,7 @@ it('should keep the leading slash', () => {
     expect(urlJoin('/foo/', '/bar//baz', options)).toBe('/foo/bar/baz');
 
     expect(urlJoin('http://google.com', options)).toBe('http://google.com');
+    expect(urlJoin('http://google.com/', options)).toBe('http://google.com');
     expect(urlJoin('http://google.com', '', options)).toBe('http://google.com');
     expect(urlJoin('http://google.com', 'foo', options)).toBe('http://google.com/foo');
     expect(urlJoin('http://google.com/', 'foo', options)).toBe('http://google.com/foo');
@@ -294,4 +264,115 @@ it('should keep the leading slash', () => {
     expect(urlJoin('http://google.com', 'foo?queryString', options)).toBe('http://google.com/foo?queryString');
     expect(urlJoin('http://google.com', 'foo', '?queryString', options)).toBe('http://google.com/foo?queryString');
     expect(urlJoin('http://google.com', 'foo/', '?queryString', options)).toBe('http://google.com/foo?queryString');
+});
+
+it('should add leading slash and keep trailing slash', () => {
+    const options = { trailingSlash: 'keep' };
+
+    expect(urlJoin(options)).toBe('/');
+    expect(urlJoin(undefined, 'foo', options)).toBe('/foo');
+    expect(urlJoin('foo', null, 'bar', options)).toBe('/foo/bar');
+    expect(urlJoin('foo', '', 'bar', options)).toBe('/foo/bar');
+    expect(urlJoin('foo', options)).toBe('/foo');
+    expect(urlJoin('/foo', options)).toBe('/foo');
+    expect(urlJoin('/', '/foo', options)).toBe('/foo');
+    expect(urlJoin('/', '//foo', options)).toBe('/foo');
+    expect(urlJoin('/', '/foo//', options)).toBe('/foo/');
+    expect(urlJoin('/', '/foo/', '', options)).toBe('/foo/');
+    expect(urlJoin('/', '/foo/', '/', options)).toBe('/foo/');
+    expect(urlJoin('foo', 'bar', options)).toBe('/foo/bar');
+    expect(urlJoin('/foo', 'bar', options)).toBe('/foo/bar');
+    expect(urlJoin('/foo', '/bar', options)).toBe('/foo/bar');
+    expect(urlJoin('/foo/', '/bar/', options)).toBe('/foo/bar/');
+    expect(urlJoin('/foo/', '/bar/baz', options)).toBe('/foo/bar/baz');
+    expect(urlJoin('/foo/', '/bar//baz', options)).toBe('/foo/bar/baz');
+
+    expect(urlJoin('http://google.com', options)).toBe('http://google.com');
+    expect(urlJoin('http://google.com/', options)).toBe('http://google.com/');
+    expect(urlJoin('http://google.com', '', options)).toBe('http://google.com');
+    expect(urlJoin('http://google.com', 'foo', options)).toBe('http://google.com/foo');
+    expect(urlJoin('http://google.com/', 'foo', options)).toBe('http://google.com/foo');
+    expect(urlJoin('http://google.com/', '/foo', options)).toBe('http://google.com/foo');
+    expect(urlJoin('http://google.com//', '/foo', options)).toBe('http://google.com/foo');
+    expect(urlJoin('http://google.com/foo', 'bar', options)).toBe('http://google.com/foo/bar');
+
+    expect(urlJoin('http://google.com', '?queryString', options)).toBe('http://google.com?queryString');
+    expect(urlJoin('http://google.com', 'foo?queryString', options)).toBe('http://google.com/foo?queryString');
+    expect(urlJoin('http://google.com', 'foo', '?queryString', options)).toBe('http://google.com/foo?queryString');
+    expect(urlJoin('http://google.com', 'foo/', '?queryString', options)).toBe('http://google.com/foo/?queryString');
+});
+
+it('should keep leading slash and add trailing slash', () => {
+    const options = { leadingSlash: 'keep', trailingSlash: true };
+
+    expect(urlJoin(options)).toBe('/');
+    expect(urlJoin(undefined, 'foo', options)).toBe('foo/');
+    expect(urlJoin('foo', null, 'bar', options)).toBe('foo/bar/');
+    expect(urlJoin('foo', '', 'bar', options)).toBe('foo/bar/');
+    expect(urlJoin('foo', options)).toBe('foo/');
+    expect(urlJoin('/foo', options)).toBe('/foo/');
+    expect(urlJoin('/', '/foo', options)).toBe('/foo/');
+    expect(urlJoin('/', '//foo', options)).toBe('/foo/');
+    expect(urlJoin('/', '/foo//', options)).toBe('/foo/');
+    expect(urlJoin('/', '/foo/', '', options)).toBe('/foo/');
+    expect(urlJoin('/', '/foo/', '/', options)).toBe('/foo/');
+    expect(urlJoin('foo', 'bar', options)).toBe('foo/bar/');
+    expect(urlJoin('/foo', 'bar', options)).toBe('/foo/bar/');
+    expect(urlJoin('/foo', '/bar', options)).toBe('/foo/bar/');
+    expect(urlJoin('/foo/', '/bar/', options)).toBe('/foo/bar/');
+    expect(urlJoin('/foo/', '/bar/baz', options)).toBe('/foo/bar/baz/');
+    expect(urlJoin('/foo/', '/bar//baz', options)).toBe('/foo/bar/baz/');
+
+    expect(urlJoin('http://google.com', options)).toBe('http://google.com/');
+    expect(urlJoin('http://google.com/', options)).toBe('http://google.com/');
+    expect(urlJoin('http://google.com', '', options)).toBe('http://google.com/');
+    expect(urlJoin('http://google.com', 'foo', options)).toBe('http://google.com/foo/');
+    expect(urlJoin('http://google.com/', 'foo', options)).toBe('http://google.com/foo/');
+    expect(urlJoin('http://google.com/', '/foo', options)).toBe('http://google.com/foo/');
+    expect(urlJoin('http://google.com//', '/foo', options)).toBe('http://google.com/foo/');
+    expect(urlJoin('http://google.com/foo', 'bar', options)).toBe('http://google.com/foo/bar/');
+
+    expect(urlJoin('http://google.com', '?queryString', options)).toBe('http://google.com/?queryString');
+    expect(urlJoin('http://google.com', 'foo?queryString', options)).toBe('http://google.com/foo/?queryString');
+    expect(urlJoin('http://google.com', 'foo', '?queryString', options)).toBe('http://google.com/foo/?queryString');
+    expect(urlJoin('http://google.com', 'foo/', '?queryString', options)).toBe('http://google.com/foo/?queryString');
+    expect(urlJoin('http://google.com?queryString', options)).toBe('http://google.com/?queryString');
+});
+
+it('should remove leading slash and keep trailing slash', () => {
+    const options = { leadingSlash: false, trailingSlash: 'keep' };
+
+    expect(urlJoin(options)).toBe('');
+    expect(urlJoin(undefined, 'foo', options)).toBe('foo');
+    expect(urlJoin('foo', null, 'bar', options)).toBe('foo/bar');
+    expect(urlJoin('foo', '', 'bar', options)).toBe('foo/bar');
+    expect(urlJoin('foo', options)).toBe('foo');
+    expect(urlJoin('/foo', options)).toBe('foo');
+    expect(urlJoin('/', '/foo', options)).toBe('foo');
+    expect(urlJoin('/', '//foo', options)).toBe('foo');
+    expect(urlJoin('/', '/foo//', options)).toBe('foo/');
+    expect(urlJoin('/', '/foo/', '', options)).toBe('foo/');
+    expect(urlJoin('/', '/foo/', '/', options)).toBe('foo/');
+    expect(urlJoin('foo', 'bar', options)).toBe('foo/bar');
+    expect(urlJoin('/foo', 'bar', options)).toBe('foo/bar');
+    expect(urlJoin('/foo', '/bar', options)).toBe('foo/bar');
+    expect(urlJoin('/foo/', '/bar/', options)).toBe('foo/bar/');
+    expect(urlJoin('/foo/', '/bar/baz', options)).toBe('foo/bar/baz');
+    expect(urlJoin('/foo/', '/bar//baz', options)).toBe('foo/bar/baz');
+
+    expect(urlJoin('http://google.com', options)).toBe('http://google.com');
+    expect(urlJoin('http://google.com/', options)).toBe('http://google.com/');
+
+    expect(urlJoin('http://google.com', '', options)).toBe('http://google.com');
+    expect(urlJoin('http://google.com', 'foo', options)).toBe('http://google.com/foo');
+    expect(urlJoin('http://google.com/', 'foo', options)).toBe('http://google.com/foo');
+    expect(urlJoin('http://google.com/', '/foo', options)).toBe('http://google.com/foo');
+    expect(urlJoin('http://google.com//', '/foo', options)).toBe('http://google.com/foo');
+    expect(urlJoin('http://google.com/foo', 'bar', options)).toBe('http://google.com/foo/bar');
+
+    expect(urlJoin('http://google.com', '?queryString', options)).toBe('http://google.com?queryString');
+    expect(urlJoin('http://google.com', 'foo?queryString', options)).toBe('http://google.com/foo?queryString');
+    expect(urlJoin('http://google.com', 'foo', '?queryString', options)).toBe('http://google.com/foo?queryString');
+    expect(urlJoin('http://google.com', 'foo/', '?queryString', options)).toBe('http://google.com/foo/?queryString');
+    expect(urlJoin('http://google.com?queryString', options)).toBe('http://google.com?queryString');
 });

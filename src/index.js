@@ -3,6 +3,14 @@ import queryString from 'query-string';
 const defaultUrlRegExp = /^(\w+:\/\/[^/?]+)?(.*?)(\?.+)?$/;
 const protocolRelativeUrlRegExp = /^(\/\/[^/?]+)(.*?)(\?.+)?$/;
 
+const normalizeParts = (parts) => (
+    // Normalize parts, filtering non-string or non-numeric values
+    parts
+    .filter((part) => typeof part === 'string' || typeof part === 'number')
+    .map((part) => `${part}`)
+    .filter((part) => part)
+);
+
 const parseParts = (parts, options) => {
     const { protocolRelative } = options;
 
@@ -14,8 +22,8 @@ const parseParts = (parts, options) => {
         prefix,
         pathname: {
             parts: pathname.split('/').filter((part) => part !== ''),
-            hasLeading: /^\/+/.test(pathname),
-            hasTrailing: suffix ? /[^/]\/\/+$/.test(pathname) : /[^/]\/+$/.test(pathname),
+            hasLeading: suffix ? /^\/\/+/.test(pathname) : /^\/+/.test(pathname),
+            hasTrailing: suffix ? /\/\/+$/.test(pathname) : /\/+$/.test(pathname),
         },
         suffix,
     };
@@ -79,7 +87,7 @@ const urlJoin = (...parts) => {
     };
 
     // Normalize parts, filtering non-string or non-numeric values
-    parts = parts.filter((part) => typeof part === 'string' || typeof part === 'number');
+    parts = normalizeParts(parts);
 
     // Split the parts into prefix, pathname, and suffix
     // (scheme://host)(/pathnameParts.join('/'))(?queryString)
