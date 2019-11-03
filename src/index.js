@@ -4,10 +4,12 @@ const defaultUrlRegExp = /^(\w+:\/\/[^/?]+)?(.*?)(\?.+)?$/;
 const protocolRelativeUrlRegExp = /^(\/\/[^/?]+)(.*?)(\?.+)?$/;
 
 const normalizeParts = (parts) => (
-    // Normalize parts, filtering non-string or non-numeric values
     parts
+    // Filter non-string or non-numeric values
     .filter((part) => typeof part === 'string' || typeof part === 'number')
+    // Convert to strings
     .map((part) => `${part}`)
+    // Remove empty parts
     .filter((part) => part)
 );
 
@@ -42,7 +44,10 @@ const buildUrl = (parsedParts, options) => {
 
     // Add the parts
     if (pathnameParts.length > 0) {
-        url += url || addLeading ? '/' : '';
+        if (url || addLeading) {
+            url += '/';
+        }
+
         url += pathnameParts.join('/');
     }
 
@@ -86,7 +91,7 @@ const urlJoin = (...parts) => {
         ...options,
     };
 
-    // Normalize parts, filtering non-string or non-numeric values
+    // Normalize parts before parsing them
     parts = normalizeParts(parts);
 
     // Split the parts into prefix, pathname, and suffix
