@@ -3,25 +3,71 @@ import queryString from 'query-string';
 const defaultUrlRegExp = /^(\w+:\/\/[^/?]+)?(.*?)(\?.+)?$/;
 const protocolRelativeUrlRegExp = /^(\/\/[^/?]+)(.*?)(\?.+)?$/;
 
-function splitUrl(partsStr, { protocolRelative }) {
-    const match = (protocolRelative && partsStr.match(protocolRelativeUrlRegExp)) ||
-                   partsStr.match(defaultUrlRegExp) ||
-                  [];
+const normalizeParts = (parts) => (
+    // Normalize parts, filtering non-string or non-numeric values
+    parts
+    .filter((part) => typeof part === 'string' || typeof part === 'number')
+    .map((part) => `${part}`)
+    .filter((part) => part)
+);
 
-    const beforePathname = match[1] || '';
-    const pathname = (match[2] || '')
-    // Remove leading slashes
-    .replace(/^\/+/, '')
-    // Remove trailing slashes
-    .replace(/\/+$/, '')
-    // Normalize consecutive slashes to just one
-    .replace(/\/+/g, '/');
-    const afterPathname = (match[3] || '');
+const parseParts = (parts, options) => {
+    const { protocolRelative } = options;
 
-    return { beforePathname, pathname, afterPathname };
-}
+    const partsStr = parts.join('/');
+    const urlRegExp = protocolRelative ? protocolRelativeUrlRegExp : defaultUrlRegExp;
+    const [, prefix = '', pathname = '', suffix = ''] = partsStr.match(urlRegExp) || [];
 
-export default function urlJoin(...parts) {
+    return {
+        prefix,
+        pathname: {
+            parts: pathname.split('/').filter((part) => part !== ''),
+            hasLeading: suffix ? /^\/\/+/.test(pathname) : /^\/+/.test(pathname),
+            hasTrailing: suffix ? /\/\/+$/.test(pathname) : /\/+$/.test(pathname),
+        },
+        suffix,
+    };
+};
+
+const buildUrl = (parsedParts, options) => {
+    const { prefix, pathname, suffix } = parsedParts;
+    const { parts: pathnameParts, hasLeading, hasTrailing } = pathname;
+    const { leadingSlash, trailingSlash } = options;
+
+    const addLeading = leadingSlash === true || (leadingSlash === 'keep' && hasLeading);
+    const addTrailing = trailingSlash === true || (trailingSlash === 'keep' && hasTrailing);
+
+    // Start with prefix if not empty (http://google.com)
+    let url = prefix;
+
+    // Add the parts
+    if (pathnameParts.length > 0) {
+        url += url || addLeading ? '/' : '';
+        url += pathnameParts.join('/');
+    }
+
+    // Add trailing to the end
+    if (addTrailing) {
+        url += '/';
+    }
+
+    // Add leading if URL is still empty
+    if (!url && addLeading) {
+        url += '/';
+    }
+
+    // Build a query object based on the url query string and options query object
+    const query = { ...queryString.parse(suffix, options.queryOptions), ...options.query };
+    const queryStr = queryString.stringify(query, options.queryOptions);
+
+    if (queryStr) {
+        url += `?${queryStr}`;
+    }
+
+    return url;
+};
+
+const urlJoin = (...parts) => {
     const lastArg = parts[parts.length - 1];
     let options;
 
@@ -40,40 +86,15 @@ export default function urlJoin(...parts) {
         ...options,
     };
 
-    // Join parts
-    const partsStr = parts
-    .filter((part) => typeof part === 'string' || typeof part === 'number')
-    .join('/');
+    // Normalize parts, filtering non-string or non-numeric values
+    parts = normalizeParts(parts);
 
-    // Split the parts into beforePathname, pathname, and afterPathname
-    // (scheme://host)(/pathname)(?queryString)
-    const { beforePathname, pathname, afterPathname } = splitUrl(partsStr, options);
+    // Split the parts into prefix, pathname, and suffix
+    // (scheme://host)(/pathnameParts.join('/'))(?queryString)
+    const parsedParts = parseParts(parts, options);
 
-    let url = '';
+    // Finaly build the url based on the parsedParts
+    return buildUrl(parsedParts, options);
+};
 
-    // Start with beforePathname if not empty (http://google.com)
-    if (beforePathname) {
-        url += beforePathname + (pathname ? '/' : '');
-    // Otherwise start with the leading slash
-    } else if (options.leadingSlash) {
-        url += '/';
-    }
-
-    // Add pathname (foo/bar)
-    url += pathname;
-
-    // Add trailing slash
-    if (options.trailingSlash && !url.endsWith('/')) {
-        url += '/';
-    }
-
-    // Build a query object based on the url query string and options query object
-    const query = { ...queryString.parse(afterPathname, options.queryOptions), ...options.query };
-    const queryStr = queryString.stringify(query, options.queryOptions);
-
-    if (queryStr) {
-        url += `?${queryStr}`;
-    }
-
-    return url;
-}
+export default urlJoin;
