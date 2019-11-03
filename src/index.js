@@ -3,80 +3,63 @@ import queryString from 'query-string';
 const defaultUrlRegExp = /^(\w+:\/\/[^/?]+)?(.*?)(\?.+)?$/;
 const protocolRelativeUrlRegExp = /^(\/\/[^/?]+)(.*?)(\?.+)?$/;
 
-const pipe = (...fns) => fns.reduce((f, g) => (...args) => g(f(...args)));
+const parseParts = (parts, options) => {
+    const { protocolRelative } = options;
 
-function parseUrl(partsStr, { protocolRelative }) {
-    const match = (protocolRelative && partsStr.match(protocolRelativeUrlRegExp)) ||
-                   partsStr.match(defaultUrlRegExp) ||
-                  [];
+    const partsStr = parts.join('/');
+    const urlRegExp = protocolRelative ? protocolRelativeUrlRegExp : defaultUrlRegExp;
+    const [, prefix = '', pathname = '', suffix = ''] = partsStr.match(urlRegExp) || [];
 
-    const prefix = match[1] || '';
-
-    const getParts = (prePathname) =>
-        prePathname.split('/').filter((part) => part !== '');
-
-    const hasLeadingSlash = (prePathname) => RegExp(/^\/+/).test(prePathname);
-
-    const hasTrailingSlash = (prePathname) => RegExp(/\/+$/).test(prePathname);
-
-    const prePathname = match[2] || '';
-
-    const pathname = {
-        parts: getParts(prePathname),
-        hasLeading: hasLeadingSlash(prePathname),
-        hasTrailing: hasTrailingSlash(prePathname),
+    return {
+        prefix,
+        pathname: {
+            parts: pathname.split('/').filter((part) => part !== ''),
+            hasLeading: /^\/+/.test(pathname),
+            hasTrailing: suffix ? /[^/]\/\/+$/.test(pathname) : /[^/]\/+$/.test(pathname),
+        },
+        suffix,
     };
+};
 
-    const suffix = (match[3] || '');
-
-    return { prefix, pathname, suffix };
-}
-
-function recreateUrl({ prefix, pathname, suffix }, options) {
-    // Split the parts into prefix, pathname, and suffix
-    // (scheme://host)(/pathnameParts.join('/'))(?queryString)
+const buildUrl = (parsedParts, options) => {
+    const { prefix, pathname, suffix } = parsedParts;
     const { parts: pathnameParts, hasLeading, hasTrailing } = pathname;
-
     const { leadingSlash, trailingSlash } = options;
 
-    const shouldKeepLeading = leadingSlash === 'keep' && hasLeading;
-    const shouldKeepTrailing = trailingSlash === 'keep' && hasTrailing;
+    const addLeading = leadingSlash === true || (leadingSlash === 'keep' && hasLeading);
+    const addTrailing = trailingSlash === true || (trailingSlash === 'keep' && hasTrailing);
 
-    // Add leading slash
-    const addLeadingSlash = (url) => {
-        // Start with prefix if not empty (http://google.com)
-        if (prefix) {
-            return url + prefix + (pathnameParts.length > 0 ? '/' : '');
-        }
+    // Start with prefix if not empty (http://google.com)
+    let url = prefix;
 
-        // Start with leading slash by adding it or keeping it
-        if (leadingSlash || shouldKeepLeading) {
-            return `/${url}`;
-        }
+    // Add the parts
+    if (pathnameParts.length > 0) {
+        url += url || addLeading ? '/' : '';
+        url += pathnameParts.join('/');
+    }
 
-        return url;
-    };
+    // Add trailing to the end
+    if (addTrailing) {
+        url += '/';
+    }
 
-    // Add pathname (foo/bar)
-    const addPathname = (url) => url + pathnameParts.join('/');
-
-    // Add trailing slash
-    const addTrailingSlash = (url) =>
-        (trailingSlash || shouldKeepTrailing) && !url.endsWith('/') ? `${url}/` : url;
+    // Add leading if URL is still empty
+    if (!url && addLeading) {
+        url += '/';
+    }
 
     // Build a query object based on the url query string and options query object
-    // then concatenate it in url
-    const addQuery = (url) => {
-        const query = { ...queryString.parse(suffix, options.queryOptions), ...options.query };
-        const queryStr = queryString.stringify(query, options.queryOptions);
+    const query = { ...queryString.parse(suffix, options.queryOptions), ...options.query };
+    const queryStr = queryString.stringify(query, options.queryOptions);
 
-        return queryStr ? `${url}?${queryStr}` : url;
-    };
+    if (queryStr) {
+        url += `?${queryStr}`;
+    }
 
-    return pipe(addLeadingSlash, addPathname, addTrailingSlash, addQuery)('');
-}
+    return url;
+};
 
-export default function urlJoin(...parts) {
+const urlJoin = (...parts) => {
     const lastArg = parts[parts.length - 1];
     let options;
 
@@ -95,10 +78,15 @@ export default function urlJoin(...parts) {
         ...options,
     };
 
-    // Join parts
-    const partsStr = parts
-    .filter((part) => typeof part === 'string' || typeof part === 'number')
-    .join('/');
+    // Normalize parts, filtering non-string or non-numeric values
+    parts = parts.filter((part) => typeof part === 'string' || typeof part === 'number');
 
-    return recreateUrl(parseUrl(partsStr, options), options);
-}
+    // Split the parts into prefix, pathname, and suffix
+    // (scheme://host)(/pathnameParts.join('/'))(?queryString)
+    const parsedParts = parseParts(parts, options);
+
+    // Finaly build the url based on the parsedParts
+    return buildUrl(parsedParts, options);
+};
+
+export default urlJoin;
