@@ -46,16 +46,16 @@
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.3.4",
-    "@commitlint/cli": "^7.0.0",
-    "@commitlint/config-conventional": "^7.0.0",
+    "@commitlint/cli": "^8.2.0",
+    "@commitlint/config-conventional": "^8.2.0",
     "babel-jest": "^24.5.0",
     "babel-preset-moxy": "^3.0.4",
-    "eslint": "^5.0.0",
-    "eslint-config-moxy": "^7.0.1",
-    "husky": "^1.1.2",
+    "eslint": "^6.6.0",
+    "eslint-config-moxy": "^9.1.0",
+    "husky": "^3.0.9",
     "jest": "^24.5.0",
-    "lint-staged": "^8.1.5",
-    "standard-version": "^5.0.1"
+    "lint-staged": "^9.4.2",
+    "standard-version": "^7.0.0"
   },
   "dependencies": {
     "query-string": "^6.3.0"
