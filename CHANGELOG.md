@@ -1,6 +1,13 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [2.1.0](https://github.com/moxystudio/js-proper-url-join/compare/v2.0.1...v2.1.0) (2019-11-03)
+
+
+### Features
+
+* add support to keep leading and trailing slashes ([#32](https://github.com/moxystudio/js-proper-url-join/issues/32)) ([6008865](https://github.com/moxystudio/js-proper-url-join/commit/6008865b1899be04c170eec2710ecadd1ae9aea6))
 
 <a name="2.0.1"></a>
 ## [2.0.1](https://github.com/moxystudio/js-proper-url-join/compare/v1.2.0...v2.0.1) (2019-03-13)
