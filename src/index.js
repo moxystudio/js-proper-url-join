@@ -30,34 +30,9 @@ function parseUrl(partsStr, { protocolRelative }) {
     return { prefix, pathname, suffix };
 }
 
-export default function urlJoin(...parts) {
-    const lastArg = parts[parts.length - 1];
-    let options;
-
-    // If last argument is an object, then it's the options
-    // Note that null is an object, so we verify if is truthy
-    if (lastArg && typeof lastArg === 'object') {
-        options = lastArg;
-        parts = parts.slice(0, -1);
-    }
-
-    // Parse options
-    options = {
-        leadingSlash: true,
-        trailingSlash: false,
-        protocolRelative: false,
-        ...options,
-    };
-
-    // Join parts
-    const partsStr = parts
-    .filter((part) => typeof part === 'string' || typeof part === 'number')
-    .join('/');
-
+function recreateUrl({ prefix, pathname, suffix }, options) {
     // Split the parts into prefix, pathname, and suffix
     // (scheme://host)(/pathnameParts.join('/'))(?queryString)
-    const { prefix, pathname, suffix } = parseUrl(partsStr, options);
-
     const { parts: pathnameParts, hasLeading, hasTrailing } = pathname;
 
     const { leadingSlash, trailingSlash } = options;
@@ -89,4 +64,31 @@ export default function urlJoin(...parts) {
     }
 
     return url;
+}
+
+export default function urlJoin(...parts) {
+    const lastArg = parts[parts.length - 1];
+    let options;
+
+    // If last argument is an object, then it's the options
+    // Note that null is an object, so we verify if is truthy
+    if (lastArg && typeof lastArg === 'object') {
+        options = lastArg;
+        parts = parts.slice(0, -1);
+    }
+
+    // Parse options
+    options = {
+        leadingSlash: true,
+        trailingSlash: false,
+        protocolRelative: false,
+        ...options,
+    };
+
+    // Join parts
+    const partsStr = parts
+    .filter((part) => typeof part === 'string' || typeof part === 'number')
+    .join('/');
+
+    return recreateUrl(parseUrl(partsStr, options), options);
 }
