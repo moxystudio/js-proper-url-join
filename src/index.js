@@ -3,6 +3,8 @@ import queryString from 'query-string';
 const defaultUrlRegExp = /^(\w+:\/\/[^/?]+)?(.*?)(\?.+)?$/;
 const protocolRelativeUrlRegExp = /^(\/\/[^/?]+)(.*?)(\?.+)?$/;
 
+const pipe = (...fns) => fns.reduce((f, g) => (...args) => g(f(...args)));
+
 function parseUrl(partsStr, { protocolRelative }) {
     const match = (protocolRelative && partsStr.match(protocolRelativeUrlRegExp)) ||
                    partsStr.match(defaultUrlRegExp) ||
@@ -37,33 +39,41 @@ function recreateUrl({ prefix, pathname, suffix }, options) {
 
     const { leadingSlash, trailingSlash } = options;
 
-    let url = '';
+    const shouldKeepLeading = leadingSlash === 'keep' && hasLeading;
+    const shouldKeepTrailing = trailingSlash === 'keep' && hasTrailing;
 
-    // Start with prefix if not empty (http://google.com)
-    if (prefix) {
-        url += prefix + (pathnameParts.length > 0 ? '/' : '');
-    // Otherwise start with the leading slash by adding it or keeping it
-    } else if (leadingSlash || (leadingSlash === 'keep' && hasLeading)) {
-        url += '/';
-    }
+    // Add leading slash
+    const addLeadingSlash = (url) => {
+        // Start with prefix if not empty (http://google.com)
+        if (prefix) {
+            return url + prefix + (pathnameParts.length > 0 ? '/' : '');
+        }
+
+        // Start with leading slash by adding it or keeping it
+        if (leadingSlash || shouldKeepLeading) {
+            return `/${url}`;
+        }
+
+        return url;
+    };
 
     // Add pathname (foo/bar)
-    url += pathnameParts.join('/');
+    const addPathname = (url) => url + pathnameParts.join('/');
 
-    // Add trailing slash or keep it
-    if (trailingSlash || (trailingSlash === 'keep' && hasTrailing)) {
-        url += '/';
-    }
+    // Add trailing slash
+    const addTrailingSlash = (url) =>
+        (trailingSlash || shouldKeepTrailing) && !url.endsWith('/') ? `${url}/` : url;
 
     // Build a query object based on the url query string and options query object
-    const query = { ...queryString.parse(suffix, options.queryOptions), ...options.query };
-    const queryStr = queryString.stringify(query, options.queryOptions);
+    // then concatenate it in url
+    const addQuery = (url) => {
+        const query = { ...queryString.parse(suffix, options.queryOptions), ...options.query };
+        const queryStr = queryString.stringify(query, options.queryOptions);
 
-    if (queryStr) {
-        url += `?${queryStr}`;
-    }
+        return queryStr ? `${url}?${queryStr}` : url;
+    };
 
-    return url;
+    return pipe(addLeadingSlash, addPathname, addTrailingSlash, addQuery)('');
 }
 
 export default function urlJoin(...parts) {
