@@ -229,7 +229,7 @@ it('should handle the provided query and query options objects', () => {
 it('should keep the trailing slash', () => {
     const options = { trailingSlash: 'keep' };
 
-    expect(urlJoin(options)).toBe('');
+    expect(urlJoin(options)).toBe('/');
     expect(urlJoin(undefined, 'foo', options)).toBe('/foo');
     expect(urlJoin('foo', null, 'bar', options)).toBe('/foo/bar');
     expect(urlJoin('foo', '', 'bar', options)).toBe('/foo/bar');
