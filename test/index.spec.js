@@ -293,5 +293,5 @@ it('should keep the leading slash', () => {
     expect(urlJoin('http://google.com', '?queryString', options)).toBe('http://google.com?queryString');
     expect(urlJoin('http://google.com', 'foo?queryString', options)).toBe('http://google.com/foo?queryString');
     expect(urlJoin('http://google.com', 'foo', '?queryString', options)).toBe('http://google.com/foo?queryString');
-    expect(urlJoin('http://google.com', 'foo/', '?queryString', options)).toBe('http://google.com/foo/?queryString');
+    expect(urlJoin('http://google.com', 'foo/', '?queryString', options)).toBe('http://google.com/foo?queryString');
 });
