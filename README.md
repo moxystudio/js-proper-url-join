@@ -75,17 +75,17 @@ urlJoin('foo', 'bar?queryString', { query: { biz: 'buz', foo: 'bar' } }); // /fo
 
 ###### leadingSlash
 
-Type: `boolean`   
+Type: `boolean` / `string`   
 Default: `true`
 
-Add a leading `/`
+Adds or removes leading `/`. You may pass `keep` to preserve what the leading slash only if it's present on the input.
 
 ###### trailingSlash
 
-Type: `boolean`   
+Type: `boolean` / `string`   
 Default: `false`
 
-Add a trailing `/`
+Adds or removes trailing `/`. You may pass `keep` to preserve what the trailing slash only if it's present on the input.
 
 ###### protocolRelative
 
