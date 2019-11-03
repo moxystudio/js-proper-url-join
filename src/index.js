@@ -55,24 +55,28 @@ export default function urlJoin(...parts) {
     .join('/');
 
     // Split the parts into prefix, pathname, and suffix
-    // (scheme://host)(/pathname)(?queryString)
+    // (scheme://host)(/pathnameParts.join('/'))(?queryString)
     const { prefix, pathname, suffix } = parseUrl(partsStr, options);
+
+    const { parts: pathnameParts, hasLeading, hasTrailing } = pathname;
+
+    const { leadingSlash, trailingSlash } = options;
 
     let url = '';
 
     // Start with prefix if not empty (http://google.com)
     if (prefix) {
-        url += prefix + (pathname.parts.length > 0 ? '/' : '');
-    // Otherwise start with the leading slash
-    } else if (options.leadingSlash) {
+        url += prefix + (pathnameParts.length > 0 ? '/' : '');
+    // Otherwise start with the leading slash by adding it or keeping it
+    } else if (leadingSlash || (leadingSlash === 'keep' && hasLeading)) {
         url += '/';
     }
 
     // Add pathname (foo/bar)
-    url += pathname.parts.join('/');
+    url += pathnameParts.join('/');
 
-    // Add trailing slash
-    if (options.trailingSlash && !url.endsWith('/')) {
+    // Add trailing slash or keep it
+    if (trailingSlash || (trailingSlash === 'keep' && hasTrailing)) {
         url += '/';
     }
 
