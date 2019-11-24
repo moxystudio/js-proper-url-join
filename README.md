@@ -3,10 +3,10 @@
 [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][codecov-image]][codecov-url] [![Dependency status][david-dm-image]][david-dm-url] [![Dev Dependency status][david-dm-dev-image]][david-dm-dev-url]
 
 [npm-url]:https://npmjs.org/package/proper-url-join
-[npm-image]:http://img.shields.io/npm/v/proper-url-join.svg
-[downloads-image]:http://img.shields.io/npm/dm/proper-url-join.svg
+[npm-image]:https://img.shields.io/npm/v/proper-url-join.svg
+[downloads-image]:https://img.shields.io/npm/dm/proper-url-join.svg
 [travis-url]:https://travis-ci.org/moxystudio/js-proper-url-join
-[travis-image]:http://img.shields.io/travis/moxystudio/js-proper-url-join/master.svg
+[travis-image]:https://img.shields.io/travis/moxystudio/js-proper-url-join/master.svg
 [codecov-url]:https://codecov.io/gh/moxystudio/js-proper-url-join
 [codecov-image]:https://img.shields.io/codecov/c/github/moxystudio/js-proper-url-join/master.svg
 [david-dm-url]:https://david-dm.org/moxystudio/js-proper-url-join
