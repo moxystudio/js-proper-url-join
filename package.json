@@ -58,7 +58,7 @@
     "standard-version": "^7.0.0"
   },
   "dependencies": {
-    "query-string": "^6.3.0"
+    "query-string": "^7.1.3"
   },
   "husky": {
     "hooks": {
